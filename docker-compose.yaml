@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  unleash:
+    image: unleashorg/unleash-server:4.19.1
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_NAME: unleash
+      DATABASE_USERNAME: user
+      DATABASE_PASSWORD: password
+      DATABASE_SSL: false
+      INIT_ADMIN_API_TOKENS: "*:*.admin-api-token"
+      INIT_CLIENT_API_TOKENS: "default:development.client-api-token"
+    ports:
+      - "4242:4242"
+    depends_on:
+      - postgres
+    networks:
+      - unleash
+
+  postgres:
+    image: postgres:15.1-alpine3.17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: unleash
+    networks:
+      - unleash
+
+networks:
+  unleash:
